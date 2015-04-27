@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using GlassHarpoon.Models;
 using GlassHarpoon.Views;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Tweetinvi;
 using Tweetinvi.Core.Interfaces;
@@ -24,6 +25,7 @@ namespace GlassHarpoon
         static void Main(string[] args)
         {
             var pusher = new Pusher(pusherAppId, pusherAppKey, pusherAppSecret);
+            TwitterAuth auth = new TwitterAuth();
 
             //using (var client = new HttpClient())
             //{
@@ -37,6 +39,10 @@ namespace GlassHarpoon
             //    }
             //}
 
+            //GetTweet getter = new GetTweet();
+            //TweetView view = new TweetView();
+
+            //view.RenderTweet(getter.Fetch("my cat"));
 
             var filteredStream = Stream.CreateFilteredStream();
             filteredStream.AddTrack("lol");
@@ -44,19 +50,13 @@ namespace GlassHarpoon
             {
                 if (arg.Tweet.Coordinates != null)
                 {
-                    pusher.Trigger("tweetStream", "tweetEvent", new {message = arg.Tweet.Coordinates.Latitude + "\n" + arg.Tweet.Coordinates.Longitude});
+                    MyTweet thisTweet = new MyTweet(arg.Tweet.Text, arg.Tweet.Coordinates.Latitude.ToString(), arg.Tweet.Coordinates.Longitude.ToString());
+                    var jsonObject = JsonConvert.SerializeObject(thisTweet);
+                    pusher.Trigger("tweetStream", "tweetEvent", new {message = jsonObject});
                     Console.WriteLine(arg.Tweet.Coordinates.Latitude + "\n" + arg.Tweet.Coordinates.Longitude);
                 }
             };
             filteredStream.StartStreamMatchingAllConditions();
-            
-            //TwitterAuth auth = new TwitterAuth();
-            //GetTweet getter = new GetTweet();
-            //TweetView view = new TweetView();
-
-            //view.RenderTweet(getter.Fetch("my cat"));
-
-            Console.ReadKey();
         }
     }
 }
