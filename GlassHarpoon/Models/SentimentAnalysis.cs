@@ -30,7 +30,6 @@ namespace GlassHarpoon.Models
                 {
                     JObject queryResult = response.Content.ReadAsAsync<JObject>().Result;
                     sentiment = queryResult["type"].ToString();
-                    Console.WriteLine(queryResult);
                     return sentiment;
                 }
             }

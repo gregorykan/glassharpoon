@@ -7,7 +7,6 @@ $(document).ready(function ()
 	var geocoder = new google.maps.Geocoder();
 	var pusher = new Pusher('45c06fa98717fe603c5a');
 	var channel = pusher.subscribe('tweetStream');
-	var place;
 	var myLatlng;
 
 	channel.bind('tweetEvent', function (data) 
@@ -18,12 +17,12 @@ $(document).ready(function ()
 
 	channel.bind('tweetEventWithPlace', function (data)
 	{
-		geocode(data["message"]["Place"]);
+		geocode(data["message"]["Place"], data["message"]["Sentiment"]);
 	});
 
 	initialize();
 
-	function geocode(place)
+	function geocode(place, sentiment)
 	{
 		// geocoder.geocode({ address: place }, function(results, status)
 		// {
@@ -44,17 +43,42 @@ $(document).ready(function ()
 			var jsonReturn = data["results"];
 			var lat = jsonReturn[0]["geometry"]["location"]["lat"];
 			var lng = jsonReturn[0]["geometry"]["location"]["lng"];
-		addCoords(lat, lng);
+		addCoords(lat, lng, sentiment);
 		});
 	}
 
-	function addCoords (lat, lng)
+	function addCoords (lat, lng, sentiment)
 	{
 		locations.push(new google.maps.LatLng(lat, lng));
 		myLatlng = new google.maps.LatLng(lat, lng);
-		var marker = new google.maps.Marker({
-			position: myLatlng
-		});
+		if (sentiment === "positive")
+		{
+			console.log("positive");
+			var marker = new google.maps.Marker(
+			{
+			position: myLatlng,
+			icon: 'sunny.png'
+			});
+		}
+		
+		else if (sentiment === "negative")
+		{
+			console.log("negative");
+			var marker = new google.maps.Marker(
+			{
+			position: myLatlng,
+			icon: 'thunderstorm.png'
+			});
+		}
+		else
+		{
+			console.log("positive");
+			var marker = new google.maps.Marker(
+			{
+			position: myLatlng,
+			icon: 'cloudy.png'
+			});
+		}
 		marker.setMap(map);
 		fillMap(locations);
 	}
@@ -71,7 +95,7 @@ $(document).ready(function ()
 		
 		var mapOptions = 
 		{
-			zoom: 2,
+			zoom: 3,
 			center: new google.maps.LatLng(37.774546, -122.433523),
 			mapTypeId: google.maps.MapTypeId.SATELLITE
 		};

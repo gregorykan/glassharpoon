@@ -47,7 +47,7 @@ namespace GlassHarpoon
             //view.RenderTweet(getter.Fetch("my cat"));
 
             var filteredStream = Stream.CreateFilteredStream();
-            filteredStream.AddTrack("lol");
+            filteredStream.AddTrack("nepal");
             filteredStream.MatchingTweetReceived += (sender, arg) =>
             {
                 if (arg.Tweet.Coordinates != null)
