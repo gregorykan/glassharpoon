@@ -26,8 +26,10 @@ namespace GlassHarpoon
         {
             var pusher = new Pusher(pusherAppId, pusherAppKey, pusherAppSecret);
             TwitterAuth auth = new TwitterAuth();
+            SentimentAnalysis analyze = new SentimentAnalysis();
+            ParseString parser = new ParseString();
 
-            //using (var client = new HttpClient())
+            //using (client)
             //{
             //    client.BaseAddress = new Uri("http://192.168.1.3:9393/");
             //    HttpResponseMessage response = client.GetAsync("help").Result;
@@ -48,12 +50,16 @@ namespace GlassHarpoon
             filteredStream.AddTrack("lol");
             filteredStream.MatchingTweetReceived += (sender, arg) =>
             {
+                if (arg.Tweet.Place != null)
+                {
+                    Console.WriteLine("place: " + arg.Tweet.Place.Name);
+                }
                 if (arg.Tweet.Coordinates != null)
                 {
+                    analyze.Analyze(parser.Parse(arg.Tweet.Text));
                     MyTweet thisTweet = new MyTweet(arg.Tweet.Text, arg.Tweet.Coordinates.Latitude.ToString(), arg.Tweet.Coordinates.Longitude.ToString());
-                    var jsonObject = JsonConvert.SerializeObject(thisTweet);
-                    pusher.Trigger("tweetStream", "tweetEvent", new {message = jsonObject});
-                    Console.WriteLine(arg.Tweet.Coordinates.Latitude + "\n" + arg.Tweet.Coordinates.Longitude);
+                    pusher.Trigger("tweetStream", "tweetEvent", new { message = thisTweet });
+                    Console.WriteLine(arg.Tweet.Text);
                 }
             };
             filteredStream.StartStreamMatchingAllConditions();

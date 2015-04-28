@@ -112,6 +112,8 @@
   <ItemGroup>
     <Compile Include="Models\GetTweet.cs" />
     <Compile Include="Models\MyTweet.cs" />
+    <Compile Include="Models\ParseString.cs" />
+    <Compile Include="Models\SentimentAnalysis.cs" />
     <Compile Include="Models\TwitterAuth.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
