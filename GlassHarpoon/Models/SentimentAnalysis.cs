@@ -11,15 +11,15 @@ namespace GlassHarpoon.Models
 {
     public class SentimentAnalysis 
     {
-        //public HttpClient client { get; set; }
 
         public SentimentAnalysis()
         {
             //client = new HttpClient();
         }
 
-        public void Analyze(string input)
+        public string Analyze(string input)
         {
+            string sentiment = "";
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://twinword-sentiment-analysis.p.mashape.com/analyze/");
@@ -28,10 +28,13 @@ namespace GlassHarpoon.Models
                 HttpResponseMessage response = client.GetAsync("?text=" + input).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    JObject whatIsThis = response.Content.ReadAsAsync<JObject>().Result;
-                    Console.WriteLine(whatIsThis["type"]);
+                    JObject queryResult = response.Content.ReadAsAsync<JObject>().Result;
+                    sentiment = queryResult["type"].ToString();
+                    Console.WriteLine(queryResult);
+                    return sentiment;
                 }
             }
+            return sentiment;
         }
     }
 }

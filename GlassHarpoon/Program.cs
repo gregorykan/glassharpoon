@@ -50,16 +50,23 @@ namespace GlassHarpoon
             filteredStream.AddTrack("lol");
             filteredStream.MatchingTweetReceived += (sender, arg) =>
             {
-                if (arg.Tweet.Place != null)
-                {
-                    Console.WriteLine("place: " + arg.Tweet.Place.Name);
-                }
                 if (arg.Tweet.Coordinates != null)
                 {
-                    analyze.Analyze(parser.Parse(arg.Tweet.Text));
-                    MyTweet thisTweet = new MyTweet(arg.Tweet.Text, arg.Tweet.Coordinates.Latitude.ToString(), arg.Tweet.Coordinates.Longitude.ToString());
+                    string sentiment = analyze.Analyze(parser.Parse(arg.Tweet.Text));
+                    MyTweet thisTweet = new TweetWithCoords(arg.Tweet.Text, sentiment, arg.Tweet.Coordinates.Latitude.ToString(), arg.Tweet.Coordinates.Longitude.ToString());
                     pusher.Trigger("tweetStream", "tweetEvent", new { message = thisTweet });
                     Console.WriteLine(arg.Tweet.Text);
+                    Console.WriteLine("coords: " + arg.Tweet.Coordinates.Latitude + ", " + arg.Tweet.Coordinates.Longitude);
+                    Console.WriteLine(sentiment);
+                }
+                else if (arg.Tweet.Place != null)
+                {
+                    string sentiment = analyze.Analyze(parser.Parse(arg.Tweet.Text));
+                    MyTweet thisTweet = new TweetWithPlace(arg.Tweet.Text, sentiment, arg.Tweet.Place.Name);
+                    pusher.Trigger("tweetStream", "tweetEventWithPlace", new { message = thisTweet });
+                    Console.WriteLine(arg.Tweet.Text);
+                    Console.WriteLine("place: " + arg.Tweet.Place.Name);
+                    Console.WriteLine(sentiment);
                 }
             };
             filteredStream.StartStreamMatchingAllConditions();
