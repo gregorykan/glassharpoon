@@ -18,12 +18,6 @@ namespace GlassHarpoon.Models
             Sentiment = sentiment;
         }
 
-        //public MyTweet(string text, string place, string sentiment)
-        //{
-        //    Text = text;
-        //    Place = place;
-        //    Sentiment = sentiment;
-        //}
     }
 
     public class TweetWithCoords : MyTweet
@@ -36,7 +30,6 @@ namespace GlassHarpoon.Models
             Latitude = lat;
             Longitude = lng;
         }
-
 
     }
 

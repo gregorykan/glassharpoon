@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using GlassHarpoon.Models;
-using GlassHarpoon.Views;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Tweetinvi;
@@ -40,11 +39,6 @@ namespace GlassHarpoon
             //        Console.ReadKey();
             //    }
             //}
-
-            //GetTweet getter = new GetTweet();
-            //TweetView view = new TweetView();
-
-            //view.RenderTweet(getter.Fetch("my cat"));
 
             var filteredStream = Stream.CreateFilteredStream();
             filteredStream.AddTrack("lol");
