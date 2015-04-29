@@ -47,7 +47,7 @@ namespace GlassHarpoon
             //view.RenderTweet(getter.Fetch("my cat"));
 
             var filteredStream = Stream.CreateFilteredStream();
-            filteredStream.AddTrack("nepal");
+            filteredStream.AddTrack("lol");
             filteredStream.MatchingTweetReceived += (sender, arg) =>
             {
                 if (arg.Tweet.Coordinates != null)
@@ -69,7 +69,15 @@ namespace GlassHarpoon
                     Console.WriteLine(sentiment);
                 }
             };
-            filteredStream.StartStreamMatchingAllConditions();
+            //filteredStream.DisconnectMessageReceived += (sender, eventArgs) => Console.WriteLine("Disconnect");
+            //filteredStream.LimitReached += (sender, eventArgs) => Console.WriteLine("Limit");
+            while (true)
+            {
+                filteredStream.StartStreamMatchingAllConditions();
+            }
+
+            
+
         }
     }
 }
