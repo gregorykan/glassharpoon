@@ -28,18 +28,6 @@ namespace GlassHarpoon
             SentimentAnalysis analyze = new SentimentAnalysis();
             ParseString parser = new ParseString();
 
-            //using (client)
-            //{
-            //    client.BaseAddress = new Uri("http://192.168.1.3:9393/");
-            //    HttpResponseMessage response = client.GetAsync("help").Result;
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        JObject whatIsThis = response.Content.ReadAsAsync<JObject>().Result;
-            //        Console.WriteLine(whatIsThis);
-            //        Console.ReadKey();
-            //    }
-            //}
-
             var filteredStream = Stream.CreateFilteredStream();
             filteredStream.AddTrack("lol");
             filteredStream.MatchingTweetReceived += (sender, arg) =>
@@ -63,15 +51,10 @@ namespace GlassHarpoon
                     Console.WriteLine(sentiment);
                 }
             };
-            //filteredStream.DisconnectMessageReceived += (sender, eventArgs) => Console.WriteLine("Disconnect");
-            //filteredStream.LimitReached += (sender, eventArgs) => Console.WriteLine("Limit");
             while (true)
             {
                 filteredStream.StartStreamMatchingAllConditions();
             }
-
-            
-
         }
     }
 }
